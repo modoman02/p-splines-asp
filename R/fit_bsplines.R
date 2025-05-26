@@ -1,4 +1,4 @@
-fit_splines <- function (x, knots, m, l) {
+fit_bsplines <- function (x, knots, m, l) {
   n <- length(x)
   d <- length(knots) - l + 1
   Z <- matrix(0, nrow = n, ncol = d)
