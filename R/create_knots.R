@@ -1,18 +1,19 @@
-create_knots <- function (x, a, b, m = 20, l, equi = T) {
-  if (!equi) {
+create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE) {
+  if (equi) {
+    inner_knots <- seq(a, b, length.out = m)
+  } else {
     probs <- seq(1, m) / (m + 1)
-    knots <- quantile(x, probs = probs, names = F)
-    h_left <- inner_knots[2] - inner_knots[1]
-    h_right <- inner_knots[length(inner_knots)] - inner_knots[length(inner_knots) - 1]
-    left_knots <- inner_knots[1] - seq(from = l, to = 1) * h_left
-    right_knots <- inner_knots[length(inner_knots)] + seq(from = 1, to = l) * h_right
+    inner_knots <- quantile(x, probs = probs, names = FALSE)
   }
-  else {
-    h <- (b - a) / (m - 1)
-    inner_knots <- seq(a, b, by = h)
-    left_knots <- seq(a - l * h, a - h, by = h)
-    right_knots <- seq(b + h, b + l * h, by = h)
+
+  # Knoten werden nur im case B-Splines erweitert, sowohl bei quantile based, als auch bei equidistant knots ist die Erweiterungsmethode aber die gleiche
+  if (!tp) {
+    left <- rep(inner_knots[1], l)
+    right <- rep(inner_knots[length(inner_knots)], l)
+    knots <- c(left, inner_knots, right)
+  } else {
+    knots <- inner_knots
   }
-  knots <- c(left_knots, inner_knots, right_knots)
+
   return(knots)
 }
