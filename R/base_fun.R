@@ -1,9 +1,16 @@
 base_fun <- function(x, knots, l, j, tp=FALSE) {
   if (tp) {
-
+    if (j == 1) {
+      return(rep(1, length(x)))
+    } else if (j <= l + 1) {
+        return(x^(j - 1))
+    } else {
+        k <- knots[j - (l + 1)]
+        return((pmax(0, x - k))^l)
+    }
   }
   else {
-    if (l == 0) {
+    if (l == 0) { # base case for recursive construction of B-Splines
       if (j == length(knots) - 1) {
         return(ifelse(x >= knots[j] & x <= knots[j+1], 1, 0))
       } else {
