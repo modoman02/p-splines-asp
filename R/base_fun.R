@@ -1,16 +1,9 @@
-base_fun <- function(x, knots, l, j, tp=FALSE) {
+base_fun <- function(x, knots, l, m, j, tp=FALSE) { # x = data, knots = list of knots, l = degree, m = num of knots in interval [a,b], j = current knot
   if (tp) {
-    if (j == 1) {
-      return(rep(1, length(x)))
-    } else if (j <= l + 1) {
-        return(x^(j - 1))
-    } else {
-        k <- knots[j - (l + 1)]
-        return((pmax(0, x - k))^l)
-    }
+    d <- m + l - 1
   }
   else {
-    if (l == 0) { # base case for recursive construction of B-Splines
+    if (l == 0) {
       if (j == length(knots) - 1) {
         return(ifelse(x >= knots[j] & x <= knots[j+1], 1, 0))
       } else {
@@ -20,8 +13,8 @@ base_fun <- function(x, knots, l, j, tp=FALSE) {
     denom1 <- knots[j + l] - knots[j]
     denom2 <- knots[j + l + 1] - knots[j + 1]
 
-    term1 <- if (denom1 == 0) {0} else ((x - knots[j]) / denom1) * base_fun(x, knots, l - 1, j)
-    term2 <- if (denom2 == 0) {0} else ((knots[j + l + 1] - x) / denom2) * base_fun(x, knots, l - 1, j + 1)
+    term1 <- if (denom1 == 0) {0} else ((x - knots[j]) / denom1) * base_fun(x, knots, l - 1, m, j)
+    term2 <- if (denom2 == 0) {0} else ((knots[j + l + 1] - x) / denom2) * base_fun(x, knots, l - 1, m, j + 1)
     return(term1 + term2)
   }
 }
