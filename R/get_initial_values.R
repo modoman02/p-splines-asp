@@ -1,4 +1,4 @@
-get_initial_values <- function(x, y, l, knots) { # ist wohl besser, das alles über Matrix Kalkulation schon mit Spline Design-Matrix zu lösen, da schnellere Konvergenz und noch ein paar Vorteile
+get_initial_values <- function(x, y, l, knots) { # initial value = erster OLS Schätzer ohne weight matrix; unklar ob man die Funktion überhaupt braucht oder ob man die paar Rechnungen sonst auch einfach im Wrapper durchführen könnte
   X <- fit_spline(x = x, knots = knots, l = l)
   beta <- solve(t(X) %*% X) %*% t(X) %*% y
   mu_hat <- as.vector(X %*% beta)
