@@ -1,24 +1,37 @@
-update_parameters <- function (x, y, X, Z, init_mu, init_sigma, lambda_mu, lambda_sigma, tolerance, K_mu, K_sigma) {  # Wrapper, that calls calc_mu() and calc_sigma() iteratively und updates them while doing so. Also calcs residuals and beta after every iteration
+update_parameters <- function (x, y, X, Z, init_mu, init_sigma, lambda_mu, lambda_sigma, tolerance, max_iterations, K_mu, K_sigma) {  # Wrapper, that calls calc_mu() and calc_sigma() iteratively und updates them while doing so. Also calcs residuals and beta after every iteration
   mu_old <- init_mu
   sigma_old <- init_sigma
-  mus <- matrix()
-  sigmas <- matrix()
+  mu_mat <- matrix(0, nrow = length(y), ncol = max_iterations)
+  sigma_mat <- matrix(0, nrow = length(y), ncol = max_iterations)
+  GD_mat <- matrix(0, nrow = 1, ncol = max_iterations)
   iterations <- 0
-  for (i in 1:max) {
+  for (i in 1:max_iterations) {
     # update mu
     beta_hat <- solve(t(X) %*% K_mu %*% X) %*% t(X) %*% K_mu %*% y
     mu_new <- calc_mu(Z, beta_hat)
     residuals <- y - mu_new
     s_hat <- log(abs(residuals)) + 0.635  # adding an additional very small number can prevent errors from happening in case we get a perfect fit (residuals = 0)
+    mu_mat[, i] <- mu_new
     # update sigma
     gamma_hat <- solve(t(Z) %*% Z) %*% t(Z) %*% s_hat
     sigma_new <- calc_sigma(X, gamma_hat)
+    sigma_mat[, i] <- sigma_new
+    W_mat <- matrix() # need to implement a proper W matrix with the 1/sigma[i] on the diagonal
+
     iterations <- iterations + 1
     # check convergence
-    if (calc_deviance(y = y, mu_hat = mu_new, sigma_hat = sigma_new) < tolerance) {
+    GD_mat[i] <- calc_deviance(y = y, mu_hat = mu_new, sigma_hat = sigma_new)
+    if (GD_mat[i] < tolerance) {
+      break
+    }
+    else if (iterations == max_iterations) {
       break
     }
   }
-  return(list(mu_hat = mu_new, sigma_hat = sigma_new, iterations = iterations))
-
+  return(list(mu_hat = mu_new,
+              sigma_hat = sigma_new,
+              iterations = iterations,
+              mu_mat = mu_mat,
+              sigma_mat = sigma_mat
+              GD_mat = GD_mat))
 }
