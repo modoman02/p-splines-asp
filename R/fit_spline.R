@@ -1,4 +1,4 @@
-fit_spline <- function (x, knots, l, tp = FALSE) {
+fit_spline <- function (x, knots, l, tp = FALSE) {  # returns Z-matrix, fitted to the respective points in the data
   n <- length(x)
   if (tp) {
     d <- l + 1 + length(knots)
