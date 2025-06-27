@@ -1,5 +1,5 @@
-update_parameters <- function (y, X, Z, lambda_mu, lambda_sigma, tolerance,
-                               max_iterations, K_mu, K_sigma, max_iterations_mu = 15, max_iterations_sigma = 15) {  # updates mu and sigma respectively, each time with an updated value of the other parameter
+update_parameters <- function (y, X, Z, max_iterations, K_mu, K_sigma, max_iterations_mu = 15,
+                               max_iterations_sigma = 15, tolerance, from, to, stepsize) {  # updates mu and sigma respectively, each time with an updated value of the other parameter
   n <- length(y)
   init_vals <- get_initial_values(X = X, Z = Z, y = y)
 
@@ -9,6 +9,7 @@ update_parameters <- function (y, X, Z, lambda_mu, lambda_sigma, tolerance,
   mu_hat[,1] <- init_vals$mu_hat
   sigma_hat[,1] <- init_vals$sigma_hat
   GD_mat[1] <- calc_deviance(y, mu_hat = mu_hat[,1], sigma_hat = sigma_hat[,1])
+  lambda_grid <- seq(from, to, by = stepsize)
 
   for (i in 1:max_iterations) {
   # iterative updates for sigma and mu respectively

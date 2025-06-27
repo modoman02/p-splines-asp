@@ -1,4 +1,4 @@
-calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_mu, max_iterations_mu, tolerance) { # estimate next mu using WLS
+calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid , max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
   n <- length(y)
   mu_hat <- matrix(NA, nrow = n, ncol = max_iterations_mu + 1)
   mu_hat[,1] <- mu_init
@@ -22,6 +22,10 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_mu, max_iterations_mu
       break
     }
   }
+
+  # approximate best lambda
+  S_hat <- matrix()
+
   return(list(mu_new = mu_hat[,i+1],
               mu_mat = mu_hat,
               GD_mu = GD_mat))
