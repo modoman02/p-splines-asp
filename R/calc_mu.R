@@ -1,8 +1,10 @@
-calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid , max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
+calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
+  # lambda_grid = grid to choose optimal lambda from, lambda_mu = initial lambda value, thats used to approximate optimal mu in the IRLS algorithm
+
   n <- length(y)
   mu_hat <- matrix(NA, nrow = n, ncol = max_iterations_mu + 1)
   mu_hat[,1] <- mu_init
-  GD_mat <- numeric(max_iterations_mu + 1)
+  GD_mat <- numeric(max_iterations_mu + 2)
   for (i in 1:max_iterations_mu) {
     # calc score
     residuals <- y - mu_hat[,i]
@@ -24,9 +26,25 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid , max_iterations
   }
 
   # approximate best lambda
-  S_hat <- matrix()
+  score <- numeric(length(lambda_grid))
+  for (j in seq_along(lambda_grid)) {
+    lambda <- lambda_grid[j]
+    beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu # using W and z from the last IRLS Iteration
+    mu_lambda <- X %*% beta_hat_lambda
+    S_lambda <- X %*% solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu
+    residuals_lambda <- z_mu - mu_lambda
+    score[j] <- (mean(residuals_lambda^2)) / (1 - mean(diag(S_lambda)))^2
+  }
+  lambda_hat = lambda_grid[which.min(score)]
 
-  return(list(mu_new = mu_hat[,i+1],
-              mu_mat = mu_hat,
-              GD_mu = GD_mat))
+  # one last IRLS Iteration, using the optimal lambda from the grid, to get the optimal mu_hat
+  beta_hat_optimal <- solve(t(X) %*% W_mu %*% X + lambda_hat * K_mu) %*% t(X) %*% W_mu %*% z_mu  # lambda fehlt noch
+  mu_hat_optimal <- X %*% beta_hat_optimal
+
+
+  return(list(mu_new = mu_hat_optimal,
+              mu_mat = mu_hat[,1:(i+1)],
+              GD_mu = GD_mat[1:(i+1)],
+              lambda_hat = lambda_hat,
+              gcv_score = score))
 }
