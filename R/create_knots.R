@@ -1,4 +1,4 @@
-create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE) {
+create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE) { #
   if (equi) {
     inner_knots <- seq(a, b, length.out = m)
   } else {
@@ -15,5 +15,8 @@ create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE) {
     knots <- inner_knots
   }
 
-  return(knots)
+  return(list(
+    knots = knots,
+    tp = tp,
+    l = l))
 }
