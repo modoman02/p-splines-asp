@@ -1,7 +1,7 @@
-create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE) { # a and b input is usually the minimum/maximum of x, which leads to
+create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE, buffer = 0.05) { # a and b input is usually the minimum/maximum of x, which leads to
   # problems at the edges. a and b get a little buffer therefore
-  a <- min(x) - 0.05 * (max(x) - min(x))
-  b <- max(x) + 0.05 * (max(x) - min(x))
+  a <- min(x) - buffer * (max(x) - min(x))
+  b <- max(x) + buffer * (max(x) - min(x))
   if (equi) {
     inner_knots <- seq(a, b, length.out = m)
   } else {
