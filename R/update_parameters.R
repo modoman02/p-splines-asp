@@ -11,6 +11,8 @@ update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_itera
   GD_mat[1] <- calc_deviance(y, mu_hat = mu_hat[,1], sigma_hat = sigma_hat[,1])
   lambda_grid_mu <- seq(from_mu, to_mu, by = stepsize_mu)
   lambda_grid_sigma <- seq(from_sigma, to_sigma, by = stepsize_sigma)
+  lambda_mu_seq <- numeric(max_iterations)
+  lambda_sigma_seq <- numeric(max_iterations)
 
   for (i in 1:max_iterations) {
   # iterative updates for sigma and mu respectively
@@ -18,10 +20,12 @@ update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_itera
                          lambda_mu = lambda_init_mu, lambda_grid = lambda_grid_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
     mu_hat[, i + 1] <- mu_result$mu_new
     GD_mat_mu <- mu_result$GD_mu
+    lambda_mu_seq[i] <- mu_result$lambda_opt
     sigma_result <- calc_sigma(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_hat[, i], mu_hat = mu_hat[, i + 1],
                                lambda_sigma = lambda_init_sigma, lambda_grid = lambda_grid_sigma, max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
     sigma_hat[, i + 1] <- sigma_result$sigma_new
     GD_mat_sigma <- sigma_result$GD_sigma
+    lambda_sigma_seq[i] <- sigma_result$lambda_opt
     GD_mat[i + 1] <- calc_deviance(y, mu_hat[, i + 1], sigma_hat[, i + 1])
     if (abs(GD_mat[i + 1] - GD_mat[i]) < tolerance) {
       break
@@ -34,5 +38,9 @@ update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_itera
               GD_mat = GD_mat,
               GD_mat_mu = GD_mat_mu,
               GD_mat_sigma = GD_mat_sigma,
+              lambda_mu = lambda_mu_seq[i],
+              lambda_sigma = lambda_sigma_seq[i],
+              lambda_mu_seq = lambda_mu_seq[1:i],
+              lambda_sigma_seq = lambda_sigma_seq[1:i],
               iterations = i))
 }
