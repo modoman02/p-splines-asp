@@ -1,11 +1,13 @@
 Package: asppsplines
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Type: Package
+Title: Adaptive Spline Estiamtion Package
+Version: 0.1.0
+Authors@R: c(
+    person("Moritz", "Dallmann", email = "moritz.dallmann@stud.uni-goettingen.de", role = c("aut", "cre")),
+    person("Nicolas", "Wackermann", email = "nicolas.wackermann@stud.uni-goettingen.de", role = c("aut", "cre"))
+)
+Description: Implements adaptive splines   with heteroscedastic modeling. 
+License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
