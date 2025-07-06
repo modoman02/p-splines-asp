@@ -11,7 +11,7 @@ fit_spline <- function (x, knots) {  # returns Z-matrix, containing the Basis fu
         Z[i, j] <- x[i]^(j-1)
       }
       for (j in 1:length(knots)) {
-        Z[i, l + 1 + j] <- base_fun(x = x[i], knots = list(knots = knots, tp = tp), m = length(knots), l = l, j = j)
+        Z[i, l + 1 + j] <- base_fun(x = x[i], knots = list(knots = knots, tp = tp, l = l), m = length(knots), j = j)
       }
     }
   }
@@ -20,7 +20,7 @@ fit_spline <- function (x, knots) {  # returns Z-matrix, containing the Basis fu
     Z <- matrix(NA, nrow = n, ncol = d)
     for (i in 1:n) {  # rows
       for(j in 1:d) { # cols
-        Z[i, j] <- base_fun(x = x[i], list(knots = knots, tp = tp), l = l, j = j, m = NA)
+        Z[i, j] <- base_fun(x = x[i], knots = list(knots = knots, tp = tp, l = l), j = j, m = NA)
       }
     }
   }

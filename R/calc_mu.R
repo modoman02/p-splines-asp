@@ -6,6 +6,7 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, 
   mu_hat[,1] <- mu_init
   GD_mat <- numeric(max_iterations_mu + 2)
   for (i in 1:max_iterations_mu) {
+    sigma_hat <- as.vector(sigma_hat)
     # calc score
     residuals <- y - mu_hat[,i]
     u_mu <- residuals / sigma_hat^2
@@ -20,7 +21,7 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, 
 
     # check convergence
     GD_mat[i+1] <- calc_deviance(y = y, mu_hat = mu_hat[,i+1], sigma_hat = sigma_hat)   # gucken, wie man das wegen Rundungen etc. regelt
-    if (i > 1 && abs(GD_mat[i+1] - GD_mat[i]) < tolerance) { #wenn i > 1 nicht gecheckt wird, vergleicht er mit initialem NA in GD_mat
+    if (i > 1 && abs(GD_mat[i+1] - GD_mat[i]) < tolerance) {
       break
     }
   }
@@ -38,7 +39,7 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, 
   lambda_hat = lambda_grid[which.min(score)]
 
   # one last IRLS Iteration, using the optimal lambda from the grid, to get the optimal mu_hat
-  beta_hat_optimal <- solve(t(X) %*% W_mu %*% X + lambda_hat * K_mu) %*% t(X) %*% W_mu %*% z_mu  # lambda fehlt noch
+  beta_hat_optimal <- solve(t(X) %*% W_mu %*% X + lambda_hat * K_mu) %*% t(X) %*% W_mu %*% z_mu
   mu_hat_optimal <- X %*% beta_hat_optimal
 
 

@@ -1,6 +1,6 @@
-update_parameters <- function (y, X, Z, max_iterations, K_mu, K_sigma, max_iterations_mu = 15,
-                               max_iterations_sigma = 15, tolerance, from_mu, to_mu, stepsize_mu,
-                               from_sigma, to_sigma, stepsize_sigma, lambda_init_mu, lambda_init_sigma) {  # updates mu and sigma respectively, each time with an updated value of the other parameter
+update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_iterations_mu = 15,
+                               max_iterations_sigma = 15, tolerance = sqrt(.Machine$double.eps), from_mu = 0.5, to_mu, stepsize_mu,
+                               from_sigma = 0.5, to_sigma, stepsize_sigma, lambda_init_mu = 1, lambda_init_sigma = 1) {  # updates mu and sigma respectively, each time with an updated value of the other parameter
   n <- length(y)
   init_vals <- get_initial_values(X = X, Z = Z, y = y)
   mu_hat <- matrix(NA, nrow = n, ncol = max_iterations+1)
@@ -21,8 +21,7 @@ update_parameters <- function (y, X, Z, max_iterations, K_mu, K_sigma, max_itera
     sigma_result <- calc_sigma(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_hat[, i], mu_hat = mu_hat[, i + 1],
                                lambda_sigma = lambda_sigma, max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
     sigma_hat[, i + 1] <- sigma_result$sigma_new
-    GD_mat_mu <- sigma_result$GD_sigma
-
+    GD_mat_sigma <- sigma_result$GD_sigma
     GD_mat[i + 1] <- calc_deviance(y, mu_hat[, i + 1], sigma_hat[, i + 1])
     if (abs(GD_mat[i + 1] - GD_mat[i]) < tolerance) {
       break
@@ -33,5 +32,7 @@ update_parameters <- function (y, X, Z, max_iterations, K_mu, K_sigma, max_itera
               mu_mat = mu_hat,
               sigma_mat = sigma_hat,
               GD_mat = GD_mat,
+              GD_mat_mu = GD_mat_mu,
+              GD_mat_sigma = GD_mat_sigma,
               iterations = i))
 }
