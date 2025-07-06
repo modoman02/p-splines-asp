@@ -21,21 +21,21 @@ summary_results_pspline <- function(result_list) {
   }
 
   cat("\n--- P-spline Model Summary ---\n")
-  cat("Optimal Lambda (mu): ", result_list$lambda_mu, "\n")
-  cat("Optimal Lambda (sigma): ", result_list$lambda_sigma, "\n")
-  cat("Final Deviance: ", result_list$deviance, "\n")
+  # cat("Optimal Lambda (mu): ", result_list$lambda, "\n")
+  # cat("Optimal Lambda (sigma): ", result_list$lambda_sigma, "\n")
+  cat("Final Deviance: ", max(which(is.na(result_list$GD_mat))), "\n")
 
   if (!is.null(result_list$iterations)) {
     cat("Number of Iterations: ", result_list$iterations, "\n")
   }
 
   cat("\n--- Estimated Curves Preview ---\n")
-  if (!is.null(result_list$mu_estimated) && length(result_list$mu_estimated) > 0) {
-    cat("First 5 estimated mu values: ", head(result_list$mu_estimated, 5), "...\n")
+  if (!is.null(result_list$mu_hat) && length(result_list$mu_hat) > 0) {
+    cat("First 5 estimated mu values: ", head(result_list$mu_hat, 5), "...\n")
   }
 
-  if (!is.null(result_list$sigma_estimated) && length(result_list$sigma_estimated) > 0) {
-    cat("First 5 estimated sigma values: ", head(result_list$sigma_estimated, 5), "...\n")
+  if (!is.null(result_list$sigma_hat) && length(result_list$sigma_hat) > 0) {
+    cat("First 5 estimated sigma values: ", head(result_list$sigma_hat, 5), "...\n")
   }
 
   cat("-------------------------------\n")
@@ -43,4 +43,5 @@ summary_results_pspline <- function(result_list) {
   invisible(result_list)
 }
 
+summarytest <- summary_results_pspline(test)
 

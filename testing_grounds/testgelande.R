@@ -100,7 +100,7 @@ full_updates <- update_parameters(X = X, Z = Z, y = y, max_iterations = 20, K_mu
 
 ## plots for full_updates
 # Anzahl der Iterationen aus dem Objekt
-n_iter <- full_updates$iterations + 1  # +1 weil Index bei 1 startet, aber Matrix n+1 Spalten hat
+n_iter <- test$iterations + 1  # +1 weil Index bei 1 startet, aber Matrix n+1 Spalten hat
 
 # 1. Plot: Verlauf der Generalisierten Deviance (GD)
 plot(0:(n_iter-1), full_updates$GD_mat[1:n_iter], type = "b", pch = 16, col = "darkred",
