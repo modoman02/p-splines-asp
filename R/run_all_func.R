@@ -17,3 +17,4 @@ run_all_funcs <- function(x, y, a, b, m = 20, l, equi = T, tp = F, buffer = 0.05
                                               to_sigma = 5, stepsize_sigma = 0.5)
 
 }
+

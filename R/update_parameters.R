@@ -15,11 +15,11 @@ update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_itera
   for (i in 1:max_iterations) {
   # iterative updates for sigma and mu respectively
     mu_result <- calc_mu(X = X, y = y, K_mu = K_mu, mu_init = mu_hat[, i], sigma_hat = sigma_hat[, i],
-                         lambda_mu = lambda_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
+                         lambda_mu = lambda_init_mu, lambda_grid = lambda_grid_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
     mu_hat[, i + 1] <- mu_result$mu_new
     GD_mat_mu <- mu_result$GD_mu
     sigma_result <- calc_sigma(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_hat[, i], mu_hat = mu_hat[, i + 1],
-                               lambda_sigma = lambda_sigma, max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
+                               lambda_sigma = lambda_init_sigma, lambda_grid = lambda_grid_sigma, max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
     sigma_hat[, i + 1] <- sigma_result$sigma_new
     GD_mat_sigma <- sigma_result$GD_sigma
     GD_mat[i + 1] <- calc_deviance(y, mu_hat[, i + 1], sigma_hat[, i + 1])
