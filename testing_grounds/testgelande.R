@@ -141,40 +141,19 @@ test <- run_all_funcs(x = x, y = y, a = min(x), b = max(x), l = 3)
 
 
 
-plot_results_pspline <- function(result_list, true_mu = NULL, true_sigma = NULL) {
+plot(x, test$mu_hat, type = "l", col = "blue", lwd = 2,
+     ylab = expression(hat(mu)(x)), xlab = "x", main = "Geschätzte Mittelwertfunktion")
+points(x, y, col = "grey", pch = 16)
+plot(test$GD_mat_mu, type = "l", col = "darkred", lwd = 2,
+     ylab = "Devianz", xlab = "Iteration", main = "Verlauf der Devianz")
+plot(test$GD_mat_sigma, type = "l", col = "darkred", lwd = 2,
+     ylab = "Devianz", xlab = "Iteration", main = "Verlauf der Devianz")
+plot(x, test$sigma_hat, type = "l", col = "darkgreen", lwd = 2,
+     ylab = expression(hat(sigma)(x)), xlab = "x", main = "Geschätzte Standardabweichung")
 
-  if (!inherits(result_list, "list")) {
-    stop("Input must be a list returned by update_parameters().")
-  }
-
-
-  x_values <- x #here you can see that this is all dependend on us having a resultslist
-  mu_estimated <- result_list$mu_hat
-  sigma_estimated <- result_list$sigma_hat
-
-  # Plot for mu
-  plot(x_values, mu_estimated, type = "l", col = "blue", lwd = 2,
-       xlab = "Predictor (x)", ylab = "Estimated mu",
-       main = "Estimated Mu Curve")
-  if (!is.null(true_mu)) {
-    lines(x_values, true_mu, col = "red", lty = 2, lwd = 2)
-    legend("topright", legend = c("Estimated mu", "True mu"),
-           col = c("blue", "red"), lty = c(1, 2), lwd = 2)
-  }
-
-  # Plot for sigma
-  plot(x_values, sigma_estimated, type = "l", col = "darkgreen", lwd = 2,
-       xlab = "Predictor (x)", ylab = "Estimated sigma",
-       main = "Estimated Sigma Curve")
-  if (!is.null(true_sigma)) {
-    lines(x_values, true_sigma, col = "purple", lty = 2, lwd = 2)
-    legend("topright", legend = c("Estimated sigma", "True sigma"),
-           col = c("darkgreen", "purple"), lty = c(1, 2), lwd = 2)
-  }
-
-  invisible(NULL)
-}
-plot_results_pspline(test)
+plot <- plot_all(test, x, y, show_sigma = T)
+plot
+summary <- summary_all(test)
 
 
 
