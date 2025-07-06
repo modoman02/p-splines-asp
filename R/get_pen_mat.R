@@ -1,4 +1,4 @@
-get_pen_mat <- function(knots, r) { # d = Anzahl Spalten = Anzahl Basis-Funktionen; r = welcher Grad Fehler soll noch berücksichtigt werden?
+get_pen_mat <- function(knots, r = 2) { # d = Anzahl Spalten = Anzahl Basis-Funktionen; r = welcher Grad Fehler soll noch berücksichtigt werden?
   tp <- knots$tp
   l <- knots$l
   d <- length(knots$knots) - l - 1

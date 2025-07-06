@@ -52,12 +52,11 @@ plot(x, init_values$sigma_hat, type = "l", col = "red")
 ####### testing calc_mu() #########
 knots_X <- create_knots(x = x, a = min(x), b = max(x), l = 3, equi = T)
 X <- fit_spline(x = x, knots = knots_X)
-K_mu <- get_pen_mat(knots = knots_X, r = 2)
+K_mu <- get_pen_mat(knots = knots_X)
 mu_init <- init_values$mu_hat
 sigma_hat <- init_values$sigma_hat
 lambda_grid_mu <- seq(0, 5, by = 0.5)
 max_iterations_mu <- 10
-tolerance <- sqrt(.Machine$double.eps)
 mu_iteration <- calc_mu(X = X, y = y, K_mu = K_mu, mu_init = mu_init, sigma_hat = sigma_hat,
                         lambda_grid = lambda_grid_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
 mu_lm <- lm(y ~ 0 + X)  # ohne Intercept
@@ -81,7 +80,7 @@ dim(K_mu)       # sollte p × p
 ######## testing calc_sigma() ########
 knots_Z <- create_knots(x = x, a = min(x), b = max(x), l = 3, m = 10)
 Z <- fit_spline(x = x, knots = knots_Z)
-K_sigma <- get_pen_mat(knots = knots_Z, r = 2)
+K_sigma <- get_pen_mat(knots = knots_Z)
 sigma_init <- init_values$sigma_hat
 mu_hat <- init_values$mu_hat
 lambda_grid_sigma <- seq(0.5, 5, by = 0.5)
