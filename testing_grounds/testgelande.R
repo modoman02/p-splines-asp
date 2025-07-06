@@ -95,6 +95,43 @@ lines(x, result_sigma$sigma_hat, col = "blue", lwd = 2)
 
 
 
+########################## this is the big one ##########################
+full_updates <- update_parameters(X = X, Z = Z, y = y, max_iterations = 20, K_mu = K_mu, K_sigma = K_sigma, to_mu = 5, stepsize_mu = 0.5,
+                                  to_sigma = 5, stepsize_sigma = 0.5)
+
+## plots for full_updates
+# Anzahl der Iterationen aus dem Objekt
+n_iter <- full_updates$iterations + 1  # +1 weil Index bei 1 startet, aber Matrix n+1 Spalten hat
+
+# 1. Plot: Verlauf der Generalisierten Deviance (GD)
+plot(0:(n_iter-1), full_updates$GD_mat[1:n_iter], type = "b", pch = 16, col = "darkred",
+     main = "Verlauf der Generalisierten Deviance (GD)", xlab = "Iteration", ylab = "GD")
+grid()
+
+# 2. Plot: Beispielhafte Entwicklung von mu(x) für verschiedene x-Werte
+matplot(full_updates$mu_mat[ , 1:n_iter], type = "l", lty = 1, col = rainbow(10, alpha = 0.6),
+        main = "Verlauf von mu(x) über Iterationen", xlab = "x (Index)", ylab = "mu(x)")
+legend("topright", legend = paste("Iter", 1:n_iter), col = rainbow(10, alpha = 0.6), lty = 1, cex = 0.6)
+
+# 3. Plot: Beispielhafte Entwicklung von sigma(x)
+matplot(full_updates$sigma_mat[ , 1:n_iter], type = "l", lty = 1, col = heat.colors(10, alpha = 0.6),
+        main = "Verlauf von sigma(x) über Iterationen", xlab = "x (Index)", ylab = "sigma(x)")
+legend("topright", legend = paste("Iter", 1:n_iter), col = heat.colors(10, alpha = 0.6), lty = 1, cex = 0.6)
+
+# 4. Wo entstehen NAs?
+which(is.na(full_updates$mu_mat), arr.ind = TRUE)
+which(is.na(full_updates$sigma_mat), arr.ind = TRUE)
+which(is.na(full_updates$GD_mat))
+
+# 5. Optional: Verlauf einzelner Punkte z. B. für x[20]
+plot(0:(n_iter-1), full_updates$mu_mat[20, 1:n_iter], type = "b", col = "blue", pch = 16,
+     main = "mu(x[20]) über Iterationen", xlab = "Iteration", ylab = "mu[20]")
+plot(0:(n_iter-1), full_updates$sigma_mat[20, 1:n_iter], type = "b", col = "orange", pch = 16,
+     main = "sigma(x[20]) über Iterationen", xlab = "Iteration", ylab = "sigma[20]")
+
+
+
+
 
 
 
