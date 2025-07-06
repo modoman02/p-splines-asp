@@ -1,3 +1,14 @@
+#' Get Initial Estimates for Optimization
+#'
+#' Computes starting values for mean and variance curves.
+#'
+#' @param X Design matrix for the mean.
+#' @param Z Design matrix for the variance.
+#' @param y Response vector.
+#'
+#' @return List with initial mean and variance estimates.
+#' @export
+
 get_initial_values <- function(X, Z, y) { # calcs OLS Estimator for beta and form that the initial mu and sigma and returns sigma_hat and mu_hat, so the update parameters() function can use them as initial values
   beta_hat <- solve(t(X) %*% X) %*% t(X) %*% y  # fit initial values with ordinary OLS
   mu_hat <- X %*% beta_hat

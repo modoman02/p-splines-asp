@@ -1,3 +1,13 @@
+#' Create Penalty Matrix
+#'
+#' Constructs the penalty matrix for spline coefficients.
+#'
+#' @param knots Knot list containing spline info.
+#' @param r Order of differences for the penalty.
+#'
+#' @return Penalty matrix.
+#' @export
+
 get_pen_mat <- function(knots, r = 2) { # d = Anzahl Spalten = Anzahl Basis-Funktionen; r = welcher Grad Fehler soll noch berücksichtigt werden?
   tp <- knots$tp
   l <- knots$l

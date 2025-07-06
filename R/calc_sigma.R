@@ -1,3 +1,20 @@
+#' Estimate Variance Function
+#'
+#' Updates the variance curve using penalized IRLS on the log scale.
+#'
+#' @param Z Design matrix for the variance.
+#' @param y Response vector.
+#' @param K_sigma Penalty matrix for the variance.
+#' @param sigma_init Initial sigma estimates.
+#' @param mu_hat Current mean estimates.
+#' @param lambda_grid Grid of smoothing parameters to test.
+#' @param lambda_sigma Starting lambda value.
+#' @param max_iterations_sigma Maximum IRLS iterations.
+#' @param tolerance Convergence threshold.
+#'
+#' @return List with updated variance estimates and diagnostics.
+#' @export
+
 calc_sigma <- function (Z, y, K_sigma, sigma_init, mu_hat, lambda_grid, lambda_sigma = 1, max_iterations_sigma, tolerance) { # calc next sigma using Fisher Updates
   n <- length(y)
   epsilon <- 1e-6

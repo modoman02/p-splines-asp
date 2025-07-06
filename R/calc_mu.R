@@ -1,3 +1,20 @@
+#' Estimate Mean Function
+#'
+#' Updates the mean curve using penalized IRLS.
+#'
+#' @param X Design matrix for the mean.
+#' @param y Response vector.
+#' @param K_mu Penalty matrix for the mean.
+#' @param mu_init Initial estimates of the mean.
+#' @param sigma_hat Current variance estimates.
+#' @param lambda_grid Grid of smoothing parameters to test.
+#' @param lambda_mu Starting lambda value.
+#' @param max_iterations_mu Maximum IRLS iterations.
+#' @param tolerance Convergence threshold.
+#'
+#' @return List with updated mean estimates and diagnostics.
+#' @export
+
 calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
   # lambda_grid = grid to choose optimal lambda from, lambda_mu = initial lambda value, thats used to approximate optimal mu in the IRLS algorithm
 

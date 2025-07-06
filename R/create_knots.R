@@ -1,3 +1,19 @@
+#' Create Spline Knot Sequence
+#'
+#' Generates inner and boundary knots for spline construction.
+#'
+#' @param x Vector of data points.
+#' @param a Lower boundary.
+#' @param b Upper boundary.
+#' @param m Number of inner knots.
+#' @param l Degree of the spline.
+#' @param equi Logical. Equidistant or quantile-based knots.
+#' @param tp Logical. Use truncated power basis if TRUE.
+#' @param buffer Percentage buffer beyond data range.
+#'
+#' @return List containing knot positions and settings.
+#' @export
+
 create_knots <- function(x, a, b, m = 20, l, equi = TRUE, tp = FALSE, buffer = 0.05) { # a and b input is usually the minimum/maximum of x, which leads to
   # problems at the edges. a and b get a little buffer therefore
   a <- min(x) - buffer * (max(x) - min(x))

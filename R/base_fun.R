@@ -1,3 +1,15 @@
+#' Evaluate a Spline Basis Function
+#'
+#' Computes a single spline basis function at given x-values.
+#'
+#' @param x Numeric vector of data points.
+#' @param knots List with knot positions and spline settings.
+#' @param m Number of inner knots.
+#' @param j Index of the basis function to evaluate.
+#'
+#' @return Numeric vector with evaluated basis function values.
+#' @export
+
 base_fun <- function(x, knots, m, j) { # x = data, knots = list of knots, l = degree, m = num of knots in interval [a,b], j = current knot
   l <- knots$l
   tp <- knots$tp

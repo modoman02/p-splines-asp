@@ -1,3 +1,13 @@
+#' Build Spline Design Matrix
+#'
+#' Constructs the spline basis matrix for data points.
+#'
+#' @param x Data vector.
+#' @param knots Knot list as created by \code{create_knots}.
+#'
+#' @return A matrix of spline basis values.
+#' @export
+
 fit_spline <- function (x, knots) {  # returns Z-matrix, containing the Basis function for every data point
   tp <- knots$tp
   l <- knots$l

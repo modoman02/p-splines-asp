@@ -1,3 +1,28 @@
+#' Iteratively Update Spline Parameters
+#'
+#' Alternates estimation of mean and variance curves until convergence.
+#'
+#' @param X Design matrix for the mean.
+#' @param Z Design matrix for the variance.
+#' @param y Response vector.
+#' @param max_iterations Maximum number of outer iterations.
+#' @param K_mu Penalty matrix for the mean.
+#' @param K_sigma Penalty matrix for the variance.
+#' @param max_iterations_mu Maximum IRLS iterations for the mean.
+#' @param max_iterations_sigma Maximum IRLS iterations for the variance.
+#' @param tolerance Convergence threshold.
+#' @param from_mu Start of lambda grid for the mean.
+#' @param to_mu End of lambda grid for the mean.
+#' @param stepsize_mu Step size for lambda grid for the mean.
+#' @param from_sigma Start of lambda grid for the variance.
+#' @param to_sigma End of lambda grid for the variance.
+#' @param stepsize_sigma Step size for lambda grid for the variance.
+#' @param lambda_init_mu Initial lambda value for mean estimation.
+#' @param lambda_init_sigma Initial lambda value for variance estimation.
+#'
+#' @return List of fitted curves and diagnostics.
+#' @export
+
 update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_iterations_mu = 15,
                                max_iterations_sigma = 15, tolerance = sqrt(.Machine$double.eps), from_mu = 0.5, to_mu, stepsize_mu,
                                from_sigma = 0.5, to_sigma, stepsize_sigma, lambda_init_mu = 1, lambda_init_sigma = 1) {  # updates mu and sigma respectively, each time with an updated value of the other parameter

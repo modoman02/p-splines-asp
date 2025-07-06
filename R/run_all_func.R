@@ -1,3 +1,20 @@
+#' Run Full Spline Estimation Pipeline
+#'
+#' Complete procedure fitting mean and variance splines for data.
+#'
+#' @param x Predictor values.
+#' @param y Response values.
+#' @param a Lower boundary for knots.
+#' @param b Upper boundary for knots.
+#' @param m Number of inner knots.
+#' @param l Degree of splines.
+#' @param equi Logical. Equidistant or quantile-based knots.
+#' @param tp Logical. Use truncated power basis if TRUE.
+#' @param buffer Percentage buffer beyond data range.
+#'
+#' @return List of fitted model results.
+#' @export
+
 run_all_funcs <- function(x, y, a, b, m = 20, l, equi = T, tp = F, buffer = 0.05) { # Wrapper, that .does everything from start to finish
   # fit splines
   knots_X <- create_knots(x = x, a = min(x), b = max(x), l = 3, equi = T)

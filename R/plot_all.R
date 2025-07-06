@@ -1,3 +1,16 @@
+#' Plot Results of Spline Fit
+#'
+#' Plots observed data along with the estimated mean curve and optional confidence bands.
+#'
+#' @param result List with fitted mean and variance from spline model.
+#' @param x Predictor values.
+#' @param y Response values.
+#' @param alpha Significance level for confidence bands.
+#' @param show_sigma Logical. Whether to plot bands around the mean.
+#'
+#' @return A ggplot object.
+#' @export
+
 plot_all <- function(result, x, y, alpha = 0.05, show_sigma = T) {
   data <- abdom
 

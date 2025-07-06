@@ -2,10 +2,7 @@ Package: asppsplines
 Type: Package
 Title: Adaptive Spline Estiamtion Package
 Version: 0.1.0
-Authors@R: c(
-    person("Moritz", "Dallmann", email = "moritz.dallmann@stud.uni-goettingen.de", role = c("aut", "cre")),
-    person("Nicolas", "Wackermann", email = "nicolas.wackermann@stud.uni-goettingen.de", role = c("aut", "cre"))
-)
+Authors@R: c(person("Moritz", "Dallmann", email = "moritz.dallmann@stud.uni-goettingen.de", role = c("aut", "cre")), person("Nicolas", "Wackermann", email = "nicolas.wackermann@stud.uni-goettingen.de", role = c("aut")))
 Description: Implements adaptive splines   with heteroscedastic modeling. 
 License: GPL-3
 Encoding: UTF-8
@@ -17,3 +14,4 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+
