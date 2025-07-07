@@ -1,3 +1,14 @@
+#' Summarize P-spline Results
+#'
+#' Prints a short summary of estimated parameters and convergence statistics
+#' from the adaptive P-spline model results.
+#'
+#' @param result A list containing model output from `run_all_funcs()` or similar,
+#'   including mu_hat, sigma_hat, GD_mat, and iteration details.
+#'
+#' @return Prints text output to the console.
+#' @export
+
 summary_all <- function(result) {
   cat("=== P-Spline summary ===\n\n")
 
