@@ -45,12 +45,12 @@ update_parameters <- function (X, Z, y, max_iterations, K_mu, K_sigma, max_itera
                          lambda_mu = lambda_init_mu, lambda_grid = lambda_grid_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
     mu_hat[, i + 1] <- mu_result$mu_new
     GD_mat_mu <- mu_result$GD_mu
-    lambda_mu_seq[i] <- mu_result$lambda_opt
+    #lambda_mu_seq[i] <- mu_result$lambda_hat
     sigma_result <- calc_sigma(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_hat[, i], mu_hat = mu_hat[, i + 1],
                                lambda_sigma = lambda_init_sigma, lambda_grid = lambda_grid_sigma, max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
     sigma_hat[, i + 1] <- sigma_result$sigma_new
     GD_mat_sigma <- sigma_result$GD_sigma
-    lambda_sigma_seq[i] <- sigma_result$lambda_opt
+    #lambda_sigma_seq[i] <- sigma_result$lambda_hat
     GD_mat[i + 1] <- calc_deviance(y, mu_hat[, i + 1], sigma_hat[, i + 1])
     if (abs(GD_mat[i + 1] - GD_mat[i]) < tolerance) {
       break
