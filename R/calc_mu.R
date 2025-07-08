@@ -15,7 +15,7 @@
 #' @return List with updated mean estimates and diagnostics.
 #' @export
 
-calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
+calc_mu2 <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
   # lambda_grid = grid to choose optimal lambda from, lambda_mu = initial lambda value, thats used to approximate optimal mu in the IRLS algorithm
 
   n <- length(y)
@@ -30,7 +30,7 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, 
     W_mu <- diag(1 / sigma_hat^2, nrow = n, ncol = n)
 
     # calc pseudo response z
-    z_mu <- mu_hat[,i] + u_mu / diag(W_mu)
+    z_mu <- mu_hat[,i] + solve(W_mu, u_mu)
 
     # update mu
     beta_hat <- solve(t(X) %*% W_mu %*% X + lambda_mu * K_mu) %*% t(X) %*% W_mu %*% z_mu  # lambda fehlt noch
@@ -49,9 +49,13 @@ calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, 
     lambda <- lambda_grid[j]
     beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu # using W and z from the last IRLS Iteration
     mu_lambda <- X %*% beta_hat_lambda
+    u_mu_lambda <- (y - mu_lambda) / sigma_hat^2
+    z_mu_lambda <- mu_lambda + solve(W_mu, u_mu_lambda)
+    beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu_lambda
+    mu_lambda <- X %*% beta_hat_lambda
     S_lambda <- X %*% solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu
-    residuals_lambda <- z_mu - mu_lambda
-    score[j] <- (mean(residuals_lambda^2)) / (1 - mean(diag(S_lambda)))^2
+    residuals_lambda <- y - mu_lambda
+    score[j] <- mean(residuals_lambda^2) / (1 - mean(diag(S_lambda)))^2     #cat("score:", score[i])
   }
   lambda_hat = lambda_grid[which.min(score)]
 
