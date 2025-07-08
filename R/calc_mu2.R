@@ -44,25 +44,29 @@ calc_mu2 <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1,
   }
 
   # approximate best lambda
-  # score <- numeric(length(lambda_grid))
-  # for (j in seq_along(lambda_grid)) {
-  #   lambda <- lambda_grid[j]
-  #   beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu # using W and z from the last IRLS Iteration
-  #   mu_lambda <- X %*% beta_hat_lambda
-  #   S_lambda <- X %*% solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu
-  #   residuals_lambda <- z_mu - mu_lambda
-  #   score[j] <- (mean(residuals_lambda^2)) / (1 - mean(diag(S_lambda)))^2
-  # }
-  # lambda_hat = lambda_grid[which.min(score)]
-  #
-  # # one last IRLS Iteration, using the optimal lambda from the grid, to get the optimal mu_hat
-  # beta_hat_optimal <- solve(t(X) %*% W_mu %*% X + lambda_hat * K_mu) %*% t(X) %*% W_mu %*% z_mu
-  # mu_hat_optimal <- X %*% beta_hat_optimal
+   score <- numeric(length(lambda_grid))
+   for (j in seq_along(lambda_grid)) {
+     lambda <- lambda_grid[j]
+     beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu # using W and z from the last IRLS Iteration
+     mu_lambda <- X %*% beta_hat_lambda
+     u_mu_lambda <- (y - mu_lambda) / sigma_hat^2
+     z_mu_lambda <- mu_lambda + solve(W_mu, u_mu_lambda)
+     beta_hat_lambda <- solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu %*% z_mu_lambda
+     mu_lambda <- X %*% beta_hat_lambda
+     S_lambda <- X %*% solve(t(X) %*% W_mu %*% X + lambda * K_mu) %*% t(X) %*% W_mu
+     residuals_lambda <- y - mu_lambda
+     score[j] <- mean(residuals_lambda^2) / (1 - mean(diag(S_lambda)))^2     #cat("score:", score[i])
+   }
+   lambda_hat = lambda_grid[which.min(score)]
+
+  # one last IRLS Iteration, using the optimal lambda from the grid, to get the optimal mu_hat
+  beta_hat_optimal <- solve(t(X) %*% W_mu %*% X + lambda_hat * K_mu) %*% t(X) %*% W_mu %*% z_mu
+  mu_hat_optimal <- X %*% beta_hat_optimal
 
 
   return(list(mu_new = mu_hat_optimal,
               mu_mat = mu_hat[,1:(i+1)],
               GD_mu = GD_mat[1:(i+1)],
-              #lambda_hat = lambda_hat,
+              lambda_hat = lambda_hat,
               gcv_score = score))
 }
