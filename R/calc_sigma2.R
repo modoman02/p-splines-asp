@@ -29,9 +29,9 @@ calc_sigma2 <- function (Z, y, K_sigma, sigma_init, mu_hat, lambda_grid, lambda_
     u_sigma <- -1 + (residuals^2) / sigma_vec^2
     w_sigma <- rep(2, times = n)
     #w_sigma <- 2 * (residuals^2) / sigma_vec^2
-    cat("min residual^2:", min(residuals^2), "\n")
-    cat("min sigma^2:", min(sigma_vec^2), "\n")
-    cat("min w_sigma_diag:", min(w_sigma), "\n")
+    # cat("min residual^2:", min(residuals^2), "\n")
+    # cat("min sigma^2:", min(sigma_vec^2), "\n")
+    # cat("min w_sigma_diag:", min(w_sigma), "\n")
     W_sigma <- diag(w_sigma)
     z_sigma <- log(sigma_vec) + u_sigma / w_sigma
 
@@ -45,27 +45,26 @@ calc_sigma2 <- function (Z, y, K_sigma, sigma_init, mu_hat, lambda_grid, lambda_
     }
   }
 
-  # approximate best lambda
-  # score <- numeric(length(lambda_grid))
-  # for (j in 1:length(lambda_grid)) {
-  #   lambda <- lambda_grid[j]
-  #   gamma_hat_lambda <- solve(t(Z) %*% W_sigma %*% Z + lambda * K_sigma) %*% t(Z) %*% W_sigma %*% z_sigma
-  #   sigma_hat_lambda <- exp(Z %*% gamma_hat_lambda)
-  #   W_sigma_lambda <- diag(as.numeric(1 / sigma_hat_lambda^2), nrow = n)
-  #   S_lambda <- Z %*% solve(t(Z) %*% W_sigma_lambda %*% Z + lambda * K_sigma) %*% t(Z) %*% W_sigma
-  #   residuals_lambda <- z_sigma - log(sigma_hat_lambda)
-  #   score[j] <- mean(residuals_lambda^2) / (1 - mean(diag(S_lambda)))^2
-  # }
-  # lambda_hat <- lambda_grid[which.min(score)]
-  lambda_hat <- lambda_sigma
+  #approximate best lambda
+  score <- numeric(length(lambda_grid))
+  for (j in 1:length(lambda_grid)) {
+    lambda <- lambda_grid[j]
+    gamma_hat_lambda <- solve(t(Z) %*% W_sigma %*% Z + lambda * K_sigma) %*% t(Z) %*% W_sigma %*% z_sigma
+    sigma_hat_lambda <- exp(Z %*% gamma_hat_lambda)
+    W_sigma_lambda <- diag(as.numeric(1 / sigma_hat_lambda^2), nrow = n)
+    S_lambda <- Z %*% solve(t(Z) %*% W_sigma_lambda %*% Z + lambda * K_sigma) %*% t(Z) %*% W_sigma
+    residuals_lambda <- z_sigma - log(sigma_hat_lambda)
+    score[j] <- mean(residuals_lambda^2) / (1 - mean(diag(S_lambda)))^2
+    cat("gcv score: ", score[j])
+  }
+  lambda_hat <- lambda_grid[which.min(score)]
   # one last IRLS Iteration with the optimal lambda
   gamma_hat_optimal <- solve(t(Z) %*% W_sigma %*% Z + lambda_hat * K_sigma) %*% t(Z) %*% W_sigma %*% z_sigma
   sigma_hat_optimal <- exp(Z %*% gamma_hat_optimal)
 
   return(list(sigma_new = sigma_hat_optimal,
               sigma_mat = sigma_hat[,1:(i+1)],
-              GD_sigma = GD_mat[1:(i+1)]
-              # lambda_hat = lambda_hat,
-              # gcv_score = score))
-  ))
+              GD_sigma = GD_mat[1:(i+1)],
+               lambda_hat = lambda_hat,
+               gcv_score = score))
 }
