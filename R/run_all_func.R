@@ -33,5 +33,11 @@ run_all_funcs <- function(x, y, a, b, m = 20, l, equi = T, tp = F, buffer = 0.05
   result <- update_parameters(X = X, Z = Z, y = y, max_iterations = 20, K_mu = K_mu, K_sigma = K_sigma, to_mu = 5, stepsize_mu = 0.5,
                                               to_sigma = 5, stepsize_sigma = 0.5)
 
+  # sum up results
+  summary_all(result)
+
+  # plot results
+  plot_all(result)
+
 }
 

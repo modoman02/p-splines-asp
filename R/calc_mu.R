@@ -15,7 +15,7 @@
 #' @return List with updated mean estimates and diagnostics.
 #' @export
 
-calc_mu2 <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
+calc_mu <- function(X, y, K_mu, mu_init, sigma_hat, lambda_grid, lambda_mu = 1, max_iterations_mu, tolerance) { # estimate next mu using Fisher Updates
   # lambda_grid = grid to choose optimal lambda from, lambda_mu = initial lambda value, thats used to approximate optimal mu in the IRLS algorithm
 
   n <- length(y)

@@ -17,7 +17,6 @@
 
 calc_sigma2 <- function (Z, y, K_sigma, sigma_init, mu_hat, lambda_grid, lambda_sigma = 1, max_iterations_sigma, tolerance) { # calc next sigma using Fisher Updates
   n <- length(y)
-  epsilon <- 1e-6
   sigma_hat <- matrix(NA, nrow = n, ncol = max_iterations_sigma + 2)
   sigma_hat[, 1] <- sigma_init
   GD_mat <- numeric(max_iterations_sigma + 2)

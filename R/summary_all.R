@@ -14,7 +14,7 @@ summary_all <- function(result) {
 
   cat("number of iterations: ", result$iterations, "\n\n")
 
-  final_dev <- tail(na.omit(result$GD_mat), 1)
+  final_dev <- min(result$GD_mat[result$GD_mat != 0])
   cat("final global deviance: ", round(final_dev, 4), "\n\n")
 
   mu <- result$mu_hat
@@ -29,11 +29,11 @@ summary_all <- function(result) {
   cat("  - minimum:      ", round(min(sigma), 4), "\n")
   cat("  - maximum:      ", round(max(sigma), 4), "\n\n")
 
-  if (!is.null(result$lambda_mu_best)) {
-    cat("best lambda for mu:     ", result$lambda_mu_best, "\n")
+  if (!is.null(result$lambda_mu)) {
+    cat("best lambda for mu:     ", result$lambda_mu, "\n")
   }
-  if (!is.null(result$lambda_sigma_best)) {
-    cat("best lambda for sigma:  ", result$lambda_sigma_best, "\n")
+  if (!is.null(result$lambda_sigma)) {
+    cat("best lambda for sigma:  ", result$lambda_sigma, "\n")
   }
 
   cat("\n=======================================\n")

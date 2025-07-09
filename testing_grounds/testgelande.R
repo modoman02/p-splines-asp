@@ -59,6 +59,8 @@ lambda_grid_mu <- seq(0, 5, by = 0.5)
 max_iterations_mu <- 10
 mu_iteration <- calc_mu(X = X, y = y, K_mu = K_mu, mu_init = mu_init, sigma_hat = sigma_hat,
                         lambda_grid = lambda_grid_mu, max_iterations_mu = max_iterations_mu, tolerance = tolerance)
+mu_iteration2 <- calc_mu2(X = X, y = y, K_mu = K_mu, mu_init = mu_init, sigma_hat = sigma_hat, lambda_grid = lambda_grid_mu,
+                          max_iterations_mu = max_iterations_mu, tolerance = 0.00001)
 mu_lm <- lm(y ~ 0 + X)  # ohne Intercept
 plot(fitted(mu_lm), type = "l", col = "blue")
 lines(mu_iteration$mu_new, col = "red")
@@ -83,10 +85,12 @@ Z <- fit_spline(x = x, knots = knots_Z)
 K_sigma <- get_pen_mat(knots = knots_Z)
 sigma_init <- init_values$sigma_hat
 mu_hat <- init_values$mu_hat
-lambda_grid_sigma <- seq(0.5, 5, by = 0.5)
+lambda_grid_sigma <- seq(0, 5, by = 0.5)
 max_iterations_sigma <- 10
 sigma_iteration <- calc_sigma(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_init, mu_hat = mu_hat, lambda_grid = lambda_grid_sigma,
                               max_iterations_sigma = max_iterations_sigma, tolerance = tolerance)
+sigma_iteration2 <- calc_sigma2(Z = Z, y = y, K_sigma = K_sigma, sigma_init = sigma_init, mu_hat = mu_hat, lambda_grid = lambda_grid_sigma,
+                                max_iterations_sigma = max_iterations_sigma, tolerance = 0.0001)
 sf <- sigma_iteration$sigma_new
 plot(x, sf, col = "gray", main = "Vergleich: Wahres sigma vs. geschätztes sigma",
      ylab = "sigma", xlab = "x", pch = 16)
@@ -153,7 +157,13 @@ plot(x, test$sigma_hat, type = "l", col = "darkgreen", lwd = 2,
 
 plot <- plot_all(test, x, y, show_sigma = T)
 plot
-summary <- summary_all(test)
-
+summary <- summary_all(result)
+plot_all(full_updates)
+result <- update_parameters(X, Z, y, max_iterations = 10, K_mu, K_sigma, max_iterations_mu = max_iterations_mu,
+                            max_iterations_sigma = max_iterations_sigma, tolerance = 0.0001, from_mu = 0, to_mu = 5, stepsize_mu = 0.5,
+                            from_sigma = 0, to_sigma = 5, stepsize_sigma = 0.5, lambda_init_mu = 1, lambda_init_sigma = 1)
+result2 <- update_parameters2(X, Z, y, max_iterations = 10, K_mu, K_sigma, max_iterations_mu = max_iterations_mu,
+                             max_iterations_sigma = max_iterations_sigma, tolerance = 0.0001, from_mu = 0, to_mu = 5, stepsize_mu = 0.5,
+                             from_sigma = 0, to_sigma = 5, stepsize_sigma = 0.5, lambda_init_mu = 1, lambda_init_sigma = 1)
 
 
