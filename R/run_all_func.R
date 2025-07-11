@@ -15,10 +15,10 @@
 #' @return List of fitted model results.
 #' @export
 
-run_all_funcs <- function(x, y, m = 20, l, equi = T, tp = F, buffer = 0.05) { # Wrapper, that .does everything from start to finish
+run_all_funcs <- function(x, y, m = 20, l, equi = T, tp = F, buffer = 0.05) { # Wrapper, that does everything from start to finish
   # fit splines
   knots_X <- create_knots(x = x, a = min(x), b = max(x), l = 3, equi = equi, tp = tp)
-  knots_Z <- create_knots(x = x, a = min(x), b = max(x), l = 3, equi = equi, tp = tp, m = 10)
+  knots_Z <- create_knots(x = x, a = min(x), b = max(x), l = 3, equi = equi, tp = tp)
   X <- fit_spline(x = x, knots = knots_X)
   Z <- fit_spline(x = x, knots = knots_Z)
 
@@ -37,7 +37,7 @@ run_all_funcs <- function(x, y, m = 20, l, equi = T, tp = F, buffer = 0.05) { # 
   summary_all(result)
 
   # plot results
-  plot_all(result, x, y)
+  print(plot_all(result, x, y))
 
 }
 
